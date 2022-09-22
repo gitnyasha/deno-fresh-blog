@@ -1,13 +1,16 @@
+// deno-lint-ignore-file
 // islands/Comment.tsx
 
 import { useState } from "preact/hooks";
 
 export default function Comment() {
   const [comment, setComment] = useState("");
+  const [comments, setComments] = useState<string[]>([]);
 
   const handleSubmit = (e: { preventDefault: () => void }) => {
+    setComments([...comments, comment]);
+    setComment("");
     e.preventDefault();
-    setComment(comment);
   };
 
   return (
@@ -29,7 +32,9 @@ export default function Comment() {
           Submit
         </button>
       </form>
-      {comment}
+      {comments.map((comment: any) => (
+        <div class="border(gray-100 2) p-2 my-2">{comment}</div>
+      ))}
     </div>
   );
 }
