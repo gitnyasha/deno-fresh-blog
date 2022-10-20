@@ -1,14 +1,20 @@
-import { PageProps } from "$fresh/server.ts";
+import { PageProps, Handlers } from "$fresh/server.ts";
 import data from "../../data/data.json" assert { type: "json" };
 import Comment from "../../islands/Comment.tsx";
+
+export const handler: Handlers = {
+  async GET(_req, ctx) {
+  const post = data.find((post) => post.id === parseInt(ctx.params.id));
+    if (!post) {
+      return new Response("Post not found", { status: 404 });
+    }
+    return ctx.render(post);
+  },
+};
 
 export default function SinglePost(props: PageProps) {
   const id = props.params.id;
   const post = data.find((post) => post.id === parseInt(id));
-
-  if (!post) {
-    return <h1>404 - Post {props.params.id} not found</h1>;
-  }
 
   return (
     <div class="p-4 mx-auto max-w-screen-md">
